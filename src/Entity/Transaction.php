@@ -23,6 +23,12 @@ class Transaction
     #[ORM\Column(length: 255)]
     private ?string $operation = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ManyTransaction')]
+    private ?Trader $OneTrader = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ManyTransaction')]
+    private ?Action $OneAction = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +66,30 @@ class Transaction
     public function setOperation(string $operation): static
     {
         $this->operation = $operation;
+
+        return $this;
+    }
+
+    public function getOneTrader(): ?Trader
+    {
+        return $this->OneTrader;
+    }
+
+    public function setOneTrader(?Trader $OneTrader): static
+    {
+        $this->OneTrader = $OneTrader;
+
+        return $this;
+    }
+
+    public function getOneAction(): ?Action
+    {
+        return $this->OneAction;
+    }
+
+    public function setOneAction(?Action $OneAction): static
+    {
+        $this->OneAction = $OneAction;
 
         return $this;
     }

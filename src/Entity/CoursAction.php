@@ -20,6 +20,9 @@ class CoursAction
     #[ORM\Column]
     private ?int $prix = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ManyCoursAction')]
+    private ?Action $OneAction = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class CoursAction
     public function setPrix(int $prix): static
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getOneAction(): ?Action
+    {
+        return $this->OneAction;
+    }
+
+    public function setOneAction(?Action $OneAction): static
+    {
+        $this->OneAction = $OneAction;
 
         return $this;
     }

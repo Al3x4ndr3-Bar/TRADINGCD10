@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ActionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ActionRepository::class)]
@@ -18,6 +20,18 @@ class Action
 
     #[ORM\Column]
     private ?int $prix = null;
+
+    #[ORM\OneToMany(mappedBy: 'OneAction', targetEntity: transaction::class)]
+    private Collection $ManyTransaction;
+
+    #[ORM\OneToMany(mappedBy: 'OneAction', targetEntity: coursaction::class)]
+    private Collection $ManyCoursAction;
+
+    public function __construct()
+    {
+        $this->ManyTransaction = new ArrayCollection();
+        $this->ManyCoursAction = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -44,6 +58,66 @@ class Action
     public function setPrix(int $prix): static
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, transaction>
+     */
+    public function getManyTransaction(): Collection
+    {
+        return $this->ManyTransaction;
+    }
+
+    public function addManyTransaction(transaction $manyTransaction): static
+    {
+        if (!$this->ManyTransaction->contains($manyTransaction)) {
+            $this->ManyTransaction->add($manyTransaction);
+            $manyTransaction->setOneAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeManyTransaction(transaction $manyTransaction): static
+    {
+        if ($this->ManyTransaction->removeElement($manyTransaction)) {
+            // set the owning side to null (unless already changed)
+            if ($manyTransaction->getOneAction() === $this) {
+                $manyTransaction->setOneAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, coursaction>
+     */
+    public function getManyCoursAction(): Collection
+    {
+        return $this->ManyCoursAction;
+    }
+
+    public function addManyCoursAction(coursaction $manyCoursAction): static
+    {
+        if (!$this->ManyCoursAction->contains($manyCoursAction)) {
+            $this->ManyCoursAction->add($manyCoursAction);
+            $manyCoursAction->setOneAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeManyCoursAction(coursaction $manyCoursAction): static
+    {
+        if ($this->ManyCoursAction->removeElement($manyCoursAction)) {
+            // set the owning side to null (unless already changed)
+            if ($manyCoursAction->getOneAction() === $this) {
+                $manyCoursAction->setOneAction(null);
+            }
+        }
 
         return $this;
     }
