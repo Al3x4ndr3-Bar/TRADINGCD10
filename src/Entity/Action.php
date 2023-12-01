@@ -121,4 +121,15 @@ class Action
 
         return $this;
     }
+
+    public function getDernierPrixAction(): int 
+    {
+        $resultat = 0;
+        foreach ($this->$ManyCoursAction as $oneAction)
+        {
+            $resultat = $oneAction->getPrix();
+        }
+        return $resultat;
+    }
+    
 }
